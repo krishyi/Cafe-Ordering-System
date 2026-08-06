@@ -1,13 +1,6 @@
 from data import CATALOG, COMBOS, MODIFIERS
-def split_valid_modifiers(item: str, modifiers):
-    category = CATALOG[item]["category"]
-    valid, invalid = [], []
-    for m in modifiers:
-        if m in MODIFIERS and category in MODIFIERS[m]["applies_to"]:
-            valid.append(m)
-        else:
-            invalid.append(m)
-    return valid, invalid
+from validators import split_valid_modifiers
+
 
 def calculate_total(order):
     total = 0.0
@@ -25,10 +18,7 @@ def calculate_total(order):
                 f"{', '.join(invalid_mods)} {verb} ignored on {item} (not applicable)."
             )
 
-        price = CATALOG[item]["price"]
-        for m in valid_mods:
-            price += MODIFIERS[m]["price"]
-
+        price = CATALOG[item]["price"] + sum(MODIFIERS[m]["price"] for m in valid_mods)
         total += price * qty
         item_quantities[item] = item_quantities.get(item, 0) + qty
 

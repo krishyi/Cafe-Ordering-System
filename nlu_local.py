@@ -39,7 +39,7 @@ class Operation(BaseModel):
 
 
 class ProcessOrder(BaseModel):
-    message_type: Literal["order_action", "question", "chitchat", "clarify"]
+    message_type: Literal["order_action", "question", "chitchat", "clarify", "finalize", "cancel"]
     reply: str
     operations: List[Operation] = Field(default_factory=list)
 
@@ -88,6 +88,15 @@ SYSTEM_PROMPT = (
     "- Questions about the menu, prices, or deals -> message_type 'question', "
     "answer directly from the menu below, operations empty.\n"
     "- Greetings/thanks/small talk -> message_type 'chitchat', operations empty.\n"
+    "- If the customer signals they're done ordering ('that's all', "
+    "'that's it', 'I'm done', 'checkout please') -> message_type "
+    "'finalize', operations empty. For 'reply', just confirm you're "
+    "wrapping up the order - do NOT state a dollar total yourself, you "
+    "don't have the price calculation; the total will be added "
+    "separately.\n"
+    "- If the customer wants to scrap the whole order ('cancel my order', "
+    "'start over', 'clear everything') -> message_type 'cancel', "
+    "operations empty, reply confirms it's cleared.\n"
     "- Always fill 'reply' with a short, friendly response confirming what "
     "was done or answering the question.\n\n"
     f"{_catalog_block()}"
