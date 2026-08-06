@@ -2,21 +2,23 @@ Cafe Order Chatbot
 
 A FastAPI backend that takes plain-English cafe orders across multiple chat turns, understands them via a local LLM (Ollama), and returns a structured order summary with pricing, combo discounts, and modifier validation.
 
-How it works
+How it works:
 data.py — the menu, modifiers, and combo deals.
 nlu_local.py — sends the message + current order to a local Ollama model with a JSON schema, and gets back structured operations (add/remove/modify/finalize/cancel) plus a natural-language reply.
 order_manager.py — in-memory order state per session. Validates modifiers against the item's category before storing anything.
 pricing.py — computes the total, applying combo discounts based on actual quantities on the order.
 validators.py — shared modifier-validation logic used by both order_manager.py and pricing.py.
 main.py — the FastAPI app that wires it all together.
-Setup
+
+Setup:
 Install Ollama (free, runs locally, no API key): https://ollama.com/download
 Pull a model:
 bash
    ollama pull llama3.1
 
-Make sure the Ollama app/service is running in the background. 3. Install Python dependencies:
+Make sure the Ollama app/service is running in the background. 
 
+Install Python dependencies:
 bash
    pip install fastapi uvicorn ollama pydantic
 Running the server
